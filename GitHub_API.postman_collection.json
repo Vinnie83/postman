@@ -1,0 +1,346 @@
+{
+	"info": {
+		"_postman_id": "634f4f45-86d2-46c2-8a74-5dc95dece202",
+		"name": "GitHub_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25603403"
+	},
+	"item": [
+		{
+			"name": "GET",
+			"item": [
+				{
+					"name": "GET_All_Issues",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check if response is an array of issues\", function () {\r",
+									"    const body = pm.response.json();\r",
+									"    console.log(\"BODY\", body);\r",
+									"    pm.expect(Array.isArray(body))\r",
+									"\r",
+									"    for(let item of body) {\r",
+									"        pm.expect(typeof(item.title)).equals(\"string\");\r",
+									"        pm.expect(typeof(item.number)).equals(\"number\");\r",
+									"        pm.expect(item.number, \"Issue number property\").is.greaterThan(0);\r",
+									"    }\r",
+									"}\r",
+									")"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.github.com/repos/Vinnie83/postman/issues",
+							"protocol": "https",
+							"host": [
+								"api",
+								"github",
+								"com"
+							],
+							"path": [
+								"repos",
+								"Vinnie83",
+								"postman",
+								"issues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_Single_Issue_Label",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.github.com/repos/Vinnie83/postman/issues/1/labels",
+							"protocol": "https",
+							"host": [
+								"api",
+								"github",
+								"com"
+							],
+							"path": [
+								"repos",
+								"Vinnie83",
+								"postman",
+								"issues",
+								"1",
+								"labels"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_Single_Issue",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check status code\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Check issue number\", function (){\r",
+									"    const body = pm.response.json();\r",
+									"\r",
+									"    pm.expect(body.number, \"Number property\").to.be.equal(1);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Issue is open\", function (){\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.state).to.equal(\"open\");\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Issue was created by the correct user\", function() {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.user.login).to.equal(\"Vinnie83\");\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.github.com/repos/Vinnie83/postman/issues/1",
+							"protocol": "https",
+							"host": [
+								"api",
+								"github",
+								"com"
+							],
+							"path": [
+								"repos",
+								"Vinnie83",
+								"postman",
+								"issues",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "Create_Issue",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check issue number\", function(){\r",
+									"    let body = pm.response.json();\r",
+									"\r",
+									"    pm.expect(body.number, \"Number properrty\").greaterThan(0);\r",
+									"    pm.expect(body.title, \"Title property\").equals(\"Fourth issue\");\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "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",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "Vinnie83",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Fourth issue\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.github.com/repos/Vinnie83/postman/issues",
+							"protocol": "https",
+							"host": [
+								"api",
+								"github",
+								"com"
+							],
+							"path": [
+								"repos",
+								"Vinnie83",
+								"postman",
+								"issues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_Issue_With_Labels",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "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",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "Vinnie83",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Issue with labels\",\r\n    \"labels\": [\"bug\", \"priority:critical\"]\r\n \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.github.com/repos/Vinnie83/postman/issues",
+							"protocol": "https",
+							"host": [
+								"api",
+								"github",
+								"com"
+							],
+							"path": [
+								"repos",
+								"Vinnie83",
+								"postman",
+								"issues"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Repos",
+			"item": [
+				{
+					"name": "GET",
+					"item": [
+						{
+							"name": "GET_All_Issues Repos",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.github.com/users/Vinnie83/repos",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"users",
+										"Vinnie83",
+										"repos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_Single_Repo",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200)   \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Check repo name\", function() {\r",
+											"   const body = pm.response.json();\r",
+											"   pm.expect(body.name, \"Name property\").equals(\"postman\");\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "https://api.github.com/repos/Vinnie83/postman",
+									"protocol": "https",
+									"host": [
+										"api",
+										"github",
+										"com"
+									],
+									"path": [
+										"repos",
+										"Vinnie83",
+										"postman"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
