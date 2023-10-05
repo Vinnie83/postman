@@ -1,0 +1,241 @@
+{
+	"info": {
+		"_postman_id": "c2595951-d20b-4ff0-b778-0ba23c1e823f",
+		"name": "TaskBoardApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Boards",
+			"item": [
+				{
+					"name": "GET",
+					"item": [
+						{
+							"name": "List all boards",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check if status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Check if response type is json\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"    const respBody = pm.response.json();\r",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+											"    pm.expect(typeof(respBody)).to.be.equal(\"object\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"id": "20214a26-a0ba-43d8-bea9-42047b11568b"
+									}
+								}
+							],
+							"id": "989603a2-d9cc-4e5a-b0cc-be7841240a6f",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "https://taskboardjs.dimomitev.repl.co/api/boards"
+							},
+							"response": []
+						}
+					],
+					"id": "86f8fc77-c8e1-42b3-9b19-234109c4ff77"
+				}
+			],
+			"id": "462cb5a2-ab6e-45c1-94c3-1aca8fde7466"
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Board",
+					"item": [
+						{
+							"name": "List all Done tasks",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check if status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Check if all tasks are with status done\", function() {\r",
+											"    const respBody = pm.response.json();\r",
+											"\r",
+											"    for (let i = 0; i < respBody.length; i++) {\r",
+											"        pm.expect(respBody[i].board.name, \"Board name property\").to.be.equal(\"Done\");\r",
+											"    }\r",
+											"})"
+										],
+										"type": "text/javascript",
+										"id": "ea1c01d1-e083-463a-b4d6-55f4ccab5493"
+									}
+								}
+							],
+							"id": "b41eb944-98d2-412f-814d-e3366b063371",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "https://taskboardjs.dimomitev.repl.co/api/tasks/board/done"
+							},
+							"response": []
+						}
+					],
+					"id": "a41e28c9-b081-4a2d-bae8-f1446107f1bd"
+				},
+				{
+					"name": "Task",
+					"item": [
+						{
+							"name": "POST",
+							"item": [
+								{
+									"name": "Create task",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Check if status code is 201 or 202\", function () {\r",
+													"    pm.expect(pm.response.code, \"Status code property\").to.be.oneOf([201, 202]);\r",
+													"\r",
+													"    const respBody = pm.response.json();\r",
+													"    pm.environment.set(\"taskId\", respBody.task.id);\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript",
+												"id": "86262c6d-3c2c-4eb5-a1d1-56584098d51c"
+											}
+										}
+									],
+									"id": "7ac8197d-764e-4ce2-88e9-c200029c9d32",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"title\": \"{{$randomCity}}\",\r\n    \"description\": \"API + UI tests\",\r\n    \"board\": \"Open\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://taskboardjs.dimomitev.repl.co/api/tasks"
+									},
+									"response": []
+								}
+							],
+							"id": "916722cc-11cc-485c-b6e3-186af07f0740"
+						},
+						{
+							"name": "PATCH",
+							"item": [
+								{
+									"name": "Update task title",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Update task title\", function() {\r",
+													"    const respBody = pm.response.json();\r",
+													"    pm.expect(respBody.task.title, \"Title property\").to.be.not.empty;\r",
+													"    pm.expect(typeof(respBody.task.title)).to.be.equal(\"string\");\r",
+													"})"
+												],
+												"type": "text/javascript",
+												"id": "8da91a64-7403-41ee-951a-a1be157dc0a7"
+											}
+										}
+									],
+									"id": "46b2f8b2-1de3-4a08-9574-0e63019e6fda",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"title\": \"Edited\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://taskboardjs.dimomitev.repl.co/api/tasks/{{taskId}}"
+									},
+									"response": []
+								}
+							],
+							"id": "ef27006b-860e-4118-82e0-a9c93826887a"
+						},
+						{
+							"name": "DELETE",
+							"item": [
+								{
+									"name": "Delete task",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Check if the task can be deleted\", function() {\r",
+													"    const respBody = pm.response.json();\r",
+													"    pm.expect(respBody.msg, \"MSG property\").to.be.equal(\"Task deleted: \" + pm.environment.get(\"taskId\"));\r",
+													"})"
+												],
+												"type": "text/javascript",
+												"id": "2f7b5e32-ac2a-4565-be28-0478cde61bc1"
+											}
+										}
+									],
+									"id": "0597f459-5f89-493d-8b7a-d0feb5530020",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"title\": \"Edited\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://taskboardjs.dimomitev.repl.co/api/tasks/{{taskId}}"
+									},
+									"response": []
+								}
+							],
+							"id": "02bdc64b-60fd-4b76-9e0b-e1c213a35eb3"
+						}
+					],
+					"id": "ed05f935-c9b7-4c78-b23b-650a6f82d581"
+				}
+			],
+			"id": "46b92164-3ebf-44b9-b339-46dbbcc69a48"
+		}
+	]
+}
