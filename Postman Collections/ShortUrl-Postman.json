@@ -1,0 +1,215 @@
+{
+	"info": {
+		"_postman_id": "cb19cf6c-c819-44c7-a2fe-db7a68ce8912",
+		"name": "Short URL_corr",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List all short URLs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0c827f3e-d2db-47c6-bba5-0ffef7397eea",
+						"exec": [
+							"pm.test(\"Check if status code is 200\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Check if response type is json\", function() {\r",
+							"    pm.response.to.be.json;\r",
+							"    const respBody = pm.response.json()\r",
+							"    pm.expect(typeof(respBody)).to.be.equal(\"object\");\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "db2f681f-45db-44a6-8c10-3d1cff730083",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{host}}/urls"
+			},
+			"response": []
+		},
+		{
+			"name": "Create new contact",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b6cd821a-9979-4205-95dd-c8b8ffa53d0e",
+						"exec": [
+							"pm.test(\"Create url response has 200 status code\", () => {\r",
+							"\r",
+							"    pm.response.to.have.status(200);\r",
+							"\r",
+							"    const respBody = pm.response.json();\r",
+							"\r",
+							"    pm.environment.set(\"shortCode\", respBody.url.shortCode);\r",
+							"    pm.environment.set(\"url\", respBody.url.url);\r",
+							"\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "0fb36757-994b-448d-804a-8df3a9a58c04",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"url\": \"https://cnn.com\",\r\n    \"shortCode\": \"cnn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{host}}/urls"
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2b7c2d22-9ce2-473c-95f5-78cd03af4a45",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check url\", () => {\r",
+							"    const respBody = pm.response.json();\r",
+							"    pm.expect(respBody.url, \"URL property\").to.be.equal(pm.environment.get(\"url\"));\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "081c32b3-3b4e-4e9f-8f15-81499341b638",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Sofia\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{host}}/urls/{{shortCode}}"
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "179eed5b-b9ae-4ec3-a7f3-ab369a3cc9d4",
+						"exec": [
+							"pm.test(\"Check the status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check the response error message\", () => {\r",
+							"    const respBody = pm.response.json();\r",
+							"    pm.expect(respBody.errMsg, \"MSG property\").to.be.equal(\"Short code already exists!\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "5c5ccddd-d912-4347-83a0-c3449d832f17",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"url\": \"https://cnn.com\",\r\n    \"shortCode\": \"cnn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{host}}/urls"
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a07c5db8-0767-473f-859c-d47f49147316",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check if the url is deleted\", () => {\r",
+							"    const respBody = pm.response.json();\r",
+							"    pm.expect(respBody.msg, \"MSG property\").to.be.equal(\"URL deleted: \" + pm.environment.get(\"shortCode\"));\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "684ea1c6-3e2f-4f10-a39f-f97b121cd4bd",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "{{host}}/urls/{{shortCode}}"
+			},
+			"response": []
+		}
+	]
+}
